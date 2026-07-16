@@ -24,7 +24,9 @@ Edit `config.json` when a relative path changes. Relative paths are resolved fro
 
 ## MVP Limits
 
-The current MVP includes architecture, config loading, path resolution, a Designer-based main window, and Start / Stop / Restart controls for FXServer and the Discord bot.
+The current MVP is a PySide6 frontend that runs PowerShell scripts from `scripts/` and displays their output.
+
+Server operations live in standalone PowerShell scripts. Each script can be run manually from PowerShell.
 
 ## UI Editing
 

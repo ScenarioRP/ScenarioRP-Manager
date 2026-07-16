@@ -7,13 +7,13 @@ from pathlib import Path
 
 @dataclass(frozen=True)
 class AppConfig:
-    project_root: str
     fxserver_exe: str
     txdata_dir: str
     server_cfg: str
     discord_bot_dir: str
     discord_bot_python: str
     discord_bot_file: str
+    txadmin_profile: str
     txadmin_url: str
     logs_dir: str
     backups_dir: str
