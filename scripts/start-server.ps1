@@ -13,7 +13,12 @@ if ($fxPid -and (Get-ManagedProcess -ProcessId $fxPid -ExpectedName "FXServer.ex
 }
 else {
     Remove-StalePid $FxPidFile
-    Stop-ManagedProcessesBySignature -ExpectedName "FXServer.exe" -ExpectedPath $FxServerExe -Source "FXServer" | Out-Null
+
+    $existingFxServers = @(Get-ManagedProcessesBySignature -ExpectedName "FXServer.exe" -ExpectedPath $FxServerExe)
+    if ($existingFxServers.Count -gt 0) {
+        Write-ManagerLine "ERROR" "FXServer" "FXServer is already running outside this Manager session. Use txAdmin to manage the running server."
+        exit 1
+    }
 
     $txAdminPortOwner = Get-ListeningPid $TxAdminPort
     if ($txAdminPortOwner) {

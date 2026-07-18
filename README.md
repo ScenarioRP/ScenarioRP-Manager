@@ -1,6 +1,6 @@
 # ScenarioRP Manager
 
-Local PySide6 manager for the ScenarioRP development server.
+Local PySide6 control center for the ScenarioRP development environment.
 
 ## Setup
 
@@ -22,32 +22,27 @@ powershell -ExecutionPolicy Bypass -File .\manager.ps1
 
 Edit `config.json` when a relative path changes. Relative paths are resolved from the ScenarioRP project root, so the project can move between drive letters.
 
-## MVP Limits
+## Responsibility Boundary
 
-The current MVP is a PySide6 frontend that runs PowerShell scripts from `scripts/` and displays their output.
+ScenarioRP Manager launches and monitors the server environment, embeds txAdmin, manages ScenarioRP helper components, and can close the remaining server shell and Discord bot after the server is offline.
 
-Server operations live in standalone PowerShell scripts. Each script can be run manually from PowerShell.
+txAdmin is the source of truth for FiveM server administration. Stop, restart, console, players, resources, recipes, settings, and runtime monitoring are handled through txAdmin.
 
 ## Script Backend
 
-The GUI calls only high-level scripts:
+The GUI calls only lifecycle scripts:
 
 - `start-all.ps1`
-- `stop-all.ps1`
-- `restart-all.ps1`
-- `safe-shutdown.ps1`
-- `status.ps1`
-- `open-txadmin.ps1`
+- `close-server-shell.ps1`
 
-Single-purpose scripts are also executable directly:
+Supporting scripts are also executable directly:
 
 - `start-server.ps1`
-- `stop-server.ps1`
-- `restart-server.ps1`
 - `start-discord-bot.ps1`
 - `stop-discord-bot.ps1`
 - `restart-discord-bot.ps1`
-- `announce-discord-offline.ps1`
+
+`close-server-shell.ps1` backs the Close Shell action. It does not announce Discord Offline and must only run after the Server-Status bot has observed the server offline. It closes the remaining FXServer shell and then stops the Server-Status bot. txAdmin remains responsible for stopping the FiveM server itself.
 
 ## UI Editing
 

@@ -27,7 +27,7 @@ $ServerCfg = Resolve-ProjectPath $Config.server_cfg
 $BotDir = Resolve-ProjectPath $Config.discord_bot_dir
 $BotPython = Resolve-ProjectPath $Config.discord_bot_python
 $BotFile = Resolve-ProjectPath $Config.discord_bot_file
-$BotOfflineAnnouncer = Join-Path $BotDir "announce_offline.py"
+$BotStateFile = Join-Path $BotDir "bot_state.json"
 $FxServerDir = Split-Path -Parent $FxServerExe
 $TxDataRoot = Split-Path -Parent $TxDataDir
 $TxAdminProfile = [string]$Config.txadmin_profile
@@ -78,8 +78,7 @@ function Get-DiscordBotEnvironmentChecks {
     return @(
         @{ Name = "Discord bot directory"; Path = $BotDir },
         @{ Name = "Discord bot Python"; Path = $BotPython },
-        @{ Name = "Discord bot file"; Path = $BotFile },
-        @{ Name = "Discord offline announcer"; Path = $BotOfflineAnnouncer }
+        @{ Name = "Discord bot file"; Path = $BotFile }
     )
 }
 
@@ -229,8 +228,7 @@ function Stop-VerifiedProcessTree {
     )
 
     Write-ManagerLine "INFO" $Source "Stopping $Context $ProcessId"
-    # FXServer/txAdmin are detached processes here, so there is no reliable stdin/control channel.
-    # taskkill without /F is still tried first; its expected child-process errors are suppressed and verified below.
+    # Helper processes are detached, so taskkill without /F is tried first and verified below.
     Invoke-TaskKill -Arguments @("/PID", "$ProcessId", "/T")
     Start-Sleep -Milliseconds 700
 
@@ -298,7 +296,8 @@ function Stop-ManagedProcess {
         [Parameter(Mandatory)][string]$ExpectedName,
         [string]$ExpectedPath,
         [string]$CommandContains,
-        [Parameter(Mandatory)][string]$Source
+        [Parameter(Mandatory)][string]$Source,
+        [string]$Context = "PID"
     )
 
     $pidValue = Get-PidFromFile $PidFile
@@ -314,12 +313,42 @@ function Stop-ManagedProcess {
         return $true
     }
 
-    $stopped = Stop-VerifiedProcessTree -ProcessId $pidValue -Source $Source
+    $stopped = Stop-VerifiedProcessTree -ProcessId $pidValue -Source $Source -Context $Context
     if ($stopped) {
         Remove-StalePid $PidFile
     }
 
     return $stopped
+}
+
+function Test-FxServerRunning {
+    $fxPid = Get-PidFromFile $FxPidFile
+    if ($fxPid) {
+        $fx = Get-ManagedProcess -ProcessId $fxPid -ExpectedName "FXServer.exe" -ExpectedPath $FxServerExe
+        if ($fx) {
+            return $true
+        }
+
+        Remove-StalePid $FxPidFile
+    }
+
+    $fxProcesses = @(Get-ManagedProcessesBySignature -ExpectedName "FXServer.exe" -ExpectedPath $FxServerExe)
+    return $fxProcesses.Count -gt 0
+}
+
+function Test-DiscordBotRunning {
+    $botPid = Get-PidFromFile $BotPidFile
+    if ($botPid) {
+        $bot = Get-ManagedProcess -ProcessId $botPid -ExpectedName "python.exe" -ExpectedPath $BotPython -CommandContains $BotFile
+        if ($bot) {
+            return $true
+        }
+
+        Remove-StalePid $BotPidFile
+    }
+
+    $botProcesses = @(Get-ManagedProcessesBySignature -ExpectedName "python.exe" -CommandContains $BotFile)
+    return $botProcesses.Count -gt 0
 }
 
 function Test-TcpPort {
