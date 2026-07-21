@@ -1,4 +1,4 @@
-. "$PSScriptRoot\common.ps1"
+. "$PSScriptRoot\common\bootstrap.ps1"
 
 Write-ManagerLine "INFO" "DiscordBot" "Restarting Discord Bot"
 & "$PSScriptRoot\stop-discord-bot.ps1"

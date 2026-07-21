@@ -1,4 +1,4 @@
-. "$PSScriptRoot\common.ps1"
+. "$PSScriptRoot\common\bootstrap.ps1"
 
 $environment = Test-EnvironmentChecks -Checks @(Get-DiscordBotEnvironmentChecks)
 if (-not $environment.Ok) {

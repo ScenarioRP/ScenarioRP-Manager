@@ -1,4 +1,4 @@
-. "$PSScriptRoot\common.ps1"
+. "$PSScriptRoot\common\bootstrap.ps1"
 
 $result = Test-Environment
 if ($result.Ok) {

@@ -1,4 +1,4 @@
-. "$PSScriptRoot\common.ps1"
+. "$PSScriptRoot\common\bootstrap.ps1"
 
 Write-ManagerLine "INFO" "DiscordBot" "Stopping Discord Bot"
 $botOk = Stop-ManagedProcess -PidFile $BotPidFile -ExpectedName "python.exe" -ExpectedPath $BotPython -CommandContains $BotFile -Source "DiscordBot"

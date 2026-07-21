@@ -1,4 +1,4 @@
-. "$PSScriptRoot\common.ps1"
+. "$PSScriptRoot\common\bootstrap.ps1"
 
 $environment = Test-EnvironmentChecks -Checks @(Get-ServerEnvironmentChecks)
 if (-not $environment.Ok) {
