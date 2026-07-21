@@ -1,6 +1,6 @@
 # ScenarioRP Manager — AI Development Prompt
 
-קרא את `PROJECT_PHILOSOPHY.md` לפני כל שינוי ופעל לפיו.
+קרא את `docs/PROJECT_PHILOSOPHY.md` לפני כל שינוי ופעל לפיו.
 
 ## מטרת הפרויקט
 
@@ -55,7 +55,7 @@
 ```text
 ScenarioRP/
 ├── manager.ps1
-├── PROJECT_PHILOSOPHY.md
+├── docs/PROJECT_PHILOSOPHY.md
 ├── ScenarioRP-Manager/
 │   ├── app.py
 │   ├── config.json
@@ -91,8 +91,8 @@ ScenarioRP/
 ├── server/
 │   └── FXServer.exe
 ├── txData/
-├── Discord/
-│   └── print_ip_server/
+├── ScenarioRP-Discord-Bots/
+│   └── Server-Status/
 │       ├── bot.py
 │       └── .venv/
 └── backups/
@@ -360,9 +360,9 @@ ScenarioRP-Manager/logs/discord-bot.log
   "fxserver_exe": "server/FXServer.exe",
   "txdata_dir": "txData/ScenarioRP",
   "server_cfg": "txData/ScenarioRP/server.cfg",
-  "discord_bot_dir": "Discord/print_ip_server",
-  "discord_bot_python": "Discord/print_ip_server/.venv/Scripts/python.exe",
-  "discord_bot_file": "Discord/print_ip_server/bot.py",
+  "discord_bot_dir": "ScenarioRP-Discord-Bots/Server-Status",
+  "discord_bot_python": "ScenarioRP-Discord-Bots/Server-Status/.venv/Scripts/python.exe",
+  "discord_bot_file": "ScenarioRP-Discord-Bots/Server-Status/bot.py",
   "txadmin_url": "http://127.0.0.1:40120",
   "logs_dir": "ScenarioRP-Manager/logs",
   "backups_dir": "backups"
