@@ -7,14 +7,21 @@ from pathlib import Path
 from typing import Mapping
 
 
-def _resource_root() -> Path:
+def _distribution_root() -> Path:
+    if getattr(sys, "frozen", False):
+        return Path(sys.executable).resolve().parent
+
+    return Path(__file__).resolve().parents[1]
+
+
+def _bundle_root(distribution_root: Path) -> Path:
     if getattr(sys, "frozen", False):
         bundle_root = getattr(sys, "_MEIPASS", None)
         if bundle_root:
             return Path(bundle_root).resolve()
-        return Path(sys.executable).resolve().parent
+        return distribution_root
 
-    return Path(__file__).resolve().parents[1]
+    return distribution_root
 
 
 def _user_data_root(root: Path) -> Path:
@@ -28,8 +35,9 @@ def _user_data_root(root: Path) -> Path:
     return root / "user_data"
 
 
-ROOT = _resource_root()
-APP = ROOT / "app"
+ROOT = _distribution_root()
+BUNDLE_ROOT = _bundle_root(ROOT)
+APP = BUNDLE_ROOT / "app"
 ASSETS = ROOT / "assets"
 SYSTEM_DATA = ROOT / "system_data"
 USER_DATA = _user_data_root(ROOT)
@@ -37,7 +45,7 @@ UPDATE_CONFIG = SYSTEM_DATA / "update_config.json"
 UPDATES = USER_DATA / "updates"
 UPDATE_DOWNLOADS = UPDATES / "downloads"
 UPDATE_EXTRACTED = UPDATES / "extracted"
-UPDATE_BACKUP = UPDATES / "backup"
+UPDATE_BACKUP = UPDATES / "backups"
 
 
 @dataclass(frozen=True)
@@ -148,7 +156,7 @@ class AppPaths:
 
     @property
     def update_backup(self) -> Path:
-        return self.updates / "backup"
+        return self.updates / "backups"
 
     def resolve_project_path(self, value: str | Path) -> Path:
         path = Path(value)

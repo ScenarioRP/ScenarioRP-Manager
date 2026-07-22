@@ -4,6 +4,7 @@ import logging
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 from unittest.mock import patch
 import zipfile
 
@@ -24,6 +25,7 @@ from app.updater.installer.launcher import ApplicationLauncher
 from app.updater.installer.rollback import RollbackManager
 from app.updater.installer.validator import UpdateValidator
 from app.updater.models import InstallerConfig
+from app.updater import updater_main
 from app.updater.updater_main import EXIT_PROCESS_TIMEOUT, EXIT_SUCCESS, main
 
 
@@ -397,6 +399,12 @@ class InstallerProcessLaunchFullFlowTests(unittest.TestCase):
                 code = main(["--app", str(app_dir), "--zip", str(zip_path), "--timeout", "0.01", "--pid", "123"])
 
             self.assertEqual(code, EXIT_PROCESS_TIMEOUT)
+
+    def test_updater_main_help_returns_success_without_stdout(self) -> None:
+        with mock.patch.object(updater_main.sys, "stdout", None):
+            code = main(["--help"])
+
+        self.assertEqual(code, EXIT_SUCCESS)
 
 
 if __name__ == "__main__":

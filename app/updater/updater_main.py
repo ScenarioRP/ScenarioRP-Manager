@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+import sys
 
 from app.updater.exceptions import (
     UpdateBackupError,
@@ -48,8 +49,12 @@ def parse_args(argv: list[str] | None = None) -> InstallerConfig:
 
 def main(argv: list[str] | None = None) -> int:
     """Create the installer and start the future installer flow."""
+    args = list(sys.argv[1:] if argv is None else argv)
+    if _help_requested(args) and not _stdout_available():
+        return EXIT_SUCCESS
+
     try:
-        config = parse_args(argv)
+        config = parse_args(args)
     except SystemExit as exc:
         return int(exc.code) if isinstance(exc.code, int) else EXIT_INVALID_ARGUMENTS
 
@@ -84,6 +89,15 @@ def _exit_code_for_error(exc: UpdateError) -> int:
     if isinstance(exc, UpdateLaunchError):
         return EXIT_LAUNCH_FAILURE
     return EXIT_GENERAL_FAILURE
+
+
+def _help_requested(argv: list[str]) -> bool:
+    return any(value in {"-h", "--help"} for value in argv)
+
+
+def _stdout_available() -> bool:
+    stdout = getattr(sys, "stdout", None)
+    return stdout is not None and not getattr(stdout, "closed", False)
 
 
 if __name__ == "__main__":

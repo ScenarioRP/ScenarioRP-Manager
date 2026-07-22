@@ -7,3 +7,5 @@ user_data/cache/
 user_data/saves/
 user_data/state/
 user_data/updates/
+build/work/
+dist/
