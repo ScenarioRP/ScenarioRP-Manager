@@ -5,11 +5,11 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
-from app.updater.downloader import UpdateDownloader
+from app.updater.client.downloader import UpdateDownloader
+from app.updater.client.release_provider import GitHubReleaseProvider
+from app.updater.client.version import APP_VERSION, is_newer_version
 from app.updater.exceptions import UpdateConfigError
 from app.updater.models import UpdateRelease
-from app.updater.release_provider import GitHubReleaseProvider
-from app.updater.version import APP_VERSION, is_newer_version
 
 
 @dataclass(frozen=True)

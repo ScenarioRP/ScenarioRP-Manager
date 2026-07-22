@@ -24,14 +24,14 @@ from app.paths import AppPaths
 from app.services.process_monitor import ProcessMonitor, SystemStatus
 from app.services.script_runner import ScriptResult, ScriptRunner
 from app.ui.update import UpdateCheckWorker, UpdateDialog, UpdateDownloadWorker
-from app.updater import (
+from app.updater.client import (
     APP_VERSION,
     GitHubReleaseProvider,
     UpdateDownloader,
     UpdateManager,
-    UpdateRelease,
     load_update_config,
 )
+from app.updater.models import UpdateRelease
 
 
 WidgetT = TypeVar("WidgetT", bound=QWidget)

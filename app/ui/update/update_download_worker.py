@@ -4,7 +4,8 @@ from pathlib import Path
 
 from PySide6.QtCore import QObject, Signal, Slot
 
-from app.updater import UpdateManager, UpdateRelease
+from app.updater.client import UpdateManager
+from app.updater.models import UpdateRelease
 
 
 class UpdateDownloadWorker(QObject):

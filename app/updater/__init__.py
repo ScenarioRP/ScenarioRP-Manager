@@ -1,17 +1,24 @@
 from __future__ import annotations
 
-from app.updater.downloader import UpdateDownloader
+from app.updater.client import (
+    APP_VERSION,
+    GitHubReleaseProvider,
+    UpdateConfig,
+    UpdateDownloader,
+    UpdateManager,
+    is_newer_version,
+    load_update_config,
+)
 from app.updater.exceptions import (
     UpdateCheckError,
     UpdateConfigError,
     UpdateDownloadError,
     UpdateError,
+    UpdateInstallerArgumentError,
+    UpdateInstallerError,
     UpdateVersionError,
 )
 from app.updater.models import UpdateRelease
-from app.updater.release_provider import GitHubReleaseProvider
-from app.updater.update_manager import UpdateConfig, UpdateManager, load_update_config
-from app.updater.version import APP_VERSION, is_newer_version
 
 __all__ = [
     "APP_VERSION",
@@ -22,6 +29,8 @@ __all__ = [
     "UpdateDownloadError",
     "UpdateDownloader",
     "UpdateError",
+    "UpdateInstallerArgumentError",
+    "UpdateInstallerError",
     "UpdateManager",
     "UpdateRelease",
     "UpdateVersionError",

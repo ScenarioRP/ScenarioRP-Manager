@@ -15,8 +15,8 @@ from app.core.config import AppConfig
 from app.paths import AppPaths
 from app.ui.main_window import MainWindow
 from app.ui.update import UpdateDialog, UpdateDownloadWorker
-from app.updater import UpdateRelease
-from app.updater.version import APP_VERSION
+from app.updater.client import APP_VERSION
+from app.updater.models import UpdateRelease
 
 
 def _qapp() -> QApplication:

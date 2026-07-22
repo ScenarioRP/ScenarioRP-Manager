@@ -8,16 +8,14 @@ from unittest.mock import patch
 
 import requests
 
-from app.updater import (
+from app.updater.client import (
     GitHubReleaseProvider,
-    UpdateCheckError,
-    UpdateDownloadError,
     UpdateDownloader,
     UpdateManager,
-    UpdateRelease,
-    UpdateVersionError,
     is_newer_version,
 )
+from app.updater.exceptions import UpdateCheckError, UpdateDownloadError, UpdateVersionError
+from app.updater.models import UpdateRelease
 
 
 class FakeResponse:
@@ -118,7 +116,7 @@ class GitHubReleaseProviderTests(unittest.TestCase):
         ]
         response = FakeResponse(payload=payload)
 
-        with patch("app.updater.release_provider.requests.get", return_value=response):
+        with patch("app.updater.client.release_provider.requests.get", return_value=response):
             release = GitHubReleaseProvider("owner/repo").get_latest_release()
 
         self.assertEqual(release.version, "v0.2.0")
@@ -128,7 +126,7 @@ class GitHubReleaseProviderTests(unittest.TestCase):
 
     def test_network_failure_raises_update_check_error(self) -> None:
         with patch(
-            "app.updater.release_provider.requests.get",
+            "app.updater.client.release_provider.requests.get",
             side_effect=requests.Timeout("timed out"),
         ):
             with self.assertRaises(UpdateCheckError):
@@ -150,7 +148,7 @@ class UpdateDownloaderTests(unittest.TestCase):
             response.on_iter_content = on_iter_content
             progress: list[tuple[int, int]] = []
 
-            with patch("app.updater.downloader.requests.get", return_value=response):
+            with patch("app.updater.client.downloader.requests.get", return_value=response):
                 result = UpdateDownloader().download(
                     "https://example.test/ScenarioRP-Windows.zip",
                     destination,
@@ -174,7 +172,7 @@ class UpdateDownloaderTests(unittest.TestCase):
                 chunk_error=requests.ConnectionError("connection lost"),
             )
 
-            with patch("app.updater.downloader.requests.get", return_value=response):
+            with patch("app.updater.client.downloader.requests.get", return_value=response):
                 with self.assertRaises(UpdateDownloadError):
                     UpdateDownloader().download("https://example.test/ScenarioRP-Windows.zip", destination)
 

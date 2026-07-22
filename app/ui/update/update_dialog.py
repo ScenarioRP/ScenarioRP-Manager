@@ -15,7 +15,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
-from app.updater import UpdateRelease
+from app.updater.models import UpdateRelease
 
 
 class UpdateDialog(QDialog):

@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from PySide6.QtCore import QObject, Signal, Slot
 
-from app.updater import UpdateManager, UpdateRelease
+from app.updater.client import UpdateManager
+from app.updater.models import UpdateRelease
 
 
 class UpdateCheckWorker(QObject):

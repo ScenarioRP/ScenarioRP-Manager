@@ -19,3 +19,11 @@ class UpdateDownloadError(UpdateError):
 
 class UpdateVersionError(UpdateError):
     """Raised when a version string cannot be parsed."""
+
+
+class UpdateInstallerError(UpdateError):
+    """Raised by the standalone installer architecture."""
+
+
+class UpdateInstallerArgumentError(UpdateInstallerError):
+    """Raised when installer command-line arguments are invalid."""
