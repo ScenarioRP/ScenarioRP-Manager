@@ -5,7 +5,7 @@ from packaging.version import InvalidVersion, Version
 from app.updater.exceptions import UpdateVersionError
 
 
-APP_VERSION = "0.1.0"
+APP_VERSION = "0.1.1"
 
 
 def is_newer_version(current_version: str, latest_version: str) -> bool:

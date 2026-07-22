@@ -125,6 +125,8 @@ class MainWindow(QMainWindow):
         self.check_updates_button = QPushButton("Check for updates", self.settings_tab)
         settings_layout = self.settings_tab.layout()
         if settings_layout is not None:
+            self.settings_version_label = QLabel(f"Version: v{APP_VERSION}", self.settings_tab)
+            settings_layout.addWidget(self.settings_version_label)
             settings_layout.addWidget(self.check_updates_button)
 
     def _setup_txadmin_view(self) -> None:

@@ -16,6 +16,7 @@ from app.paths import AppPaths
 from app.ui.main_window import MainWindow
 from app.ui.update import UpdateDialog, UpdateDownloadWorker
 from app.updater import UpdateRelease
+from app.updater.version import APP_VERSION
 
 
 def _qapp() -> QApplication:
@@ -107,6 +108,13 @@ class UpdateUiTests(unittest.TestCase):
             window._maybe_check_for_updates_on_startup()
 
             window._start_update_check.assert_not_called()
+            window.close()
+
+    def test_settings_displays_app_version(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            window = self._window(self._paths(directory))
+
+            self.assertEqual(window.settings_version_label.text(), f"Version: v{APP_VERSION}")
             window.close()
 
     def test_update_dialog_opens_when_release_is_available(self) -> None:
